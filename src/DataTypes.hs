@@ -18,5 +18,5 @@ data Derivation = Derivation String Expression
 -- Credit to Professor Sebastiaan Joosten. For use by calculus solver and
 -- arithmetic solver.
 data Calculation = Calc Expression [Step]
-data Step = Step LawName Expression
-data Law = Law String Expression Expression
+data Step = Step LawName Expression deriving (Show)
+data Law = Law String Expression Expression deriving (Show)
