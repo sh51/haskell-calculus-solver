@@ -1,0 +1,68 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: a5a593a2cbd917fa9873e1f3bd3015275bf97409825a58a8154887b626c71031
+
+name:           haskell-calculus-solver
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/smitchell556/haskell-calculus-solver#readme>
+homepage:       https://github.com/smitchell556/haskell-calculus-solver#readme
+bug-reports:    https://github.com/smitchell556/haskell-calculus-solver/issues
+author:         Sihao Huang, Spencer Mitchell
+maintainer:     sihao.huang.gr@dartmouth.edu, spencer.j.mitchell.gr@dartmouth.edu
+copyright:      2020 Sihao Huang, Spencer Mitchell
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+                   README.md
+                   ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/smitchell556/haskell-calculus-solver
+
+library
+  exposed-modules:
+                  DataTypes
+  other-modules:
+                Paths_haskell_calculus_solver
+  hs-source-dirs:
+                 src
+  ghc-options: -Wall
+  build-depends:
+                base >=4.7 && <5
+              , megaparsec
+              , prettyprinter
+  default-language: Haskell2010
+
+executable haskell-calculus-solver-exe
+  main-is: Main.hs
+  other-modules:
+                Paths_haskell_calculus_solver
+  hs-source-dirs:
+                 app
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+                base >=4.7 && <5
+              , haskell-calculus-solver
+  default-language: Haskell2010
+
+test-suite haskell-calculus-solver-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+                Paths_haskell_calculus_solver
+  hs-source-dirs:
+                 test
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+                base >=4.7 && <5
+              , megaparsec
+              , tasty
+              , tasty-hunit
+              , haskell-calculus-solver
+  default-language: Haskell2010
