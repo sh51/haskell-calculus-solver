@@ -3,7 +3,6 @@
 module Parser where
 
 import Control.Monad.Combinators.Expr
-import Data.Char
 import Data.Void (Void)
 import Text.Megaparsec
 import Text.Megaparsec.Char
