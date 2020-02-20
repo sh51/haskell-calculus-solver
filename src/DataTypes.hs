@@ -12,7 +12,7 @@ data Expression
   | Func     Expression Expression -- Ensure first expression if (Var String)
   deriving (Eq, Show)
 
-data Derivation = Derivation String Expression
+data Derivation = Derivation Expression Expression
 
 -- For use by calculus solver and arithmetic solver.
 type LawName = String
