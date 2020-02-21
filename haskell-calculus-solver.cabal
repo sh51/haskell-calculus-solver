@@ -29,6 +29,7 @@ library
   exposed-modules:
                   DataTypes
                   Parser
+		  Solver
   other-modules:
                 Paths_haskell_calculus_solver
   hs-source-dirs:
