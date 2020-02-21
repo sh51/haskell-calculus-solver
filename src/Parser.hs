@@ -38,14 +38,6 @@ pInteger = Const <$> lexeme L.decimal
 parens :: Parser a -> Parser a
 parens = between (symbol "(") (symbol ")")
 
--- Parse terms.
-pTerm :: Parser Expression
-pTerm = choice
-  [ parens pExpression
-  , pVariable
-  , pInteger
-  ]
-
 -- Operator precedence where first in list is highest precedence.
 operatorTable :: [[Operator Parser Expression]]
 operatorTable =
@@ -72,15 +64,21 @@ binary  name f = InfixL  (f <$ symbol name)
 prefix :: String -> (Expression -> Expression) -> Operator Parser Expression
 prefix  name f = Prefix  (f <$ symbol name)
 
+-- Parse terms.
+pTerm :: Parser Expression
+pTerm = choice
+  [ parens pExpression
+  , pVariable
+  , pInteger
+  ]
+
 -- Expression parser.
 pExpression :: Parser Expression
 pExpression = makeExprParser pTerm operatorTable
 
--- > deriv(x, x^2)
--- What variable do you want to derive on? x
--- Equation to derive: x^2
--- "deriv("++var++", "++equation++")"
-
--- f $ a + 2 -> f(a) + 2
--- f $ a ^ 2 -> f(a) ^ 2 || f(a ^ 2)
--- f $ a * 3 -> f(a) * 3 || f(a * 2)
+-- Top level parser that is used to parse user input.
+pDeriv :: Parser Derivation
+pDeriv = do _ <- symbol "deriv"
+            v <- pVariable
+            expr <- pExpression
+            return (Derivation v expr)
