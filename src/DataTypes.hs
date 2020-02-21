@@ -9,10 +9,10 @@ data Expression
   | Product  Expression Expression
   | Division Expression Expression
   | Expt     Expression Expression
-  | Func     Expression Expression -- Ensure first expression if (Var String)
+  | Func     Expression Expression -- Ensure first expression is (Var String)
   deriving (Eq, Show)
 
-data Derivation = Derivation Expression Expression
+data Derivation = Derivation Expression Expression deriving (Eq, Show) -- Expect first Expression to be (Var String)
 
 -- For use by calculus solver and arithmetic solver.
 type LawName = String

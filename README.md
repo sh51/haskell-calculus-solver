@@ -4,4 +4,4 @@ Authors: Sihao Huang, Spencer Mitchell
 
 A calculus solver written in Haskell.
 
-Currently: initial datatypes as Show instances (for testing)
+Currently: Parser is running.
