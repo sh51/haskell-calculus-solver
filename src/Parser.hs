@@ -12,12 +12,23 @@ import DataTypes
 
 type Parser = Parsec Void String
 
+
 -- Space consumer.
 sc :: Parser ()
 sc = L.space
   space1
   empty
   empty
+-- Empty sc
+sc' :: Parser ()
+sc' = L.space
+  empty
+  empty
+  empty
+
+-- lexeme that doesn't consume space
+lexeme' :: Parser a -> Parser a
+lexeme' = L.lexeme sc'
 
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme sc
@@ -30,6 +41,17 @@ pVariable :: Parser Expression
 pVariable = Var <$> lexeme
   ((:) <$> letterChar <*> many alphaNumChar <?> "variable")
 
+-- Parse function names
+pFuncName :: Parser Expression
+pFuncName = Var <$> lexeme'
+  ((:) <$> letterChar <*> many letterChar)
+
+-- Parse function terms
+pFunc :: Parser Expression
+pFunc = do name <- pFuncName
+           expr <- parens pExpression
+           return (Func (getName name) expr)
+  
 -- Parse integers.
 pInteger :: Parser Expression
 pInteger = Const <$> lexeme L.decimal
@@ -41,13 +63,13 @@ parens = between (symbol "(") (symbol ")")
 -- Operator precedence where first in list is highest precedence.
 operatorTable :: [[Operator Parser Expression]]
 operatorTable =
-  [ [ prefix "-" Negation
+  [ [ binary "^" Expt
+    ]
+  , [ prefix "-" Negation
     , prefix "+" id
-    ]
-  , [ binary "^" Expt
-    ]
-  , [ binary "$" Func
-    ]
+    ] 
+--  , [ binary "$" Func
+--    ]
   , [ binary "*" Product
     , binary "/" Division
     ]
@@ -68,6 +90,7 @@ prefix  name f = Prefix  (f <$ symbol name)
 pTerm :: Parser Expression
 pTerm = choice
   [ parens pExpression
+  , pFunc
   , pVariable
   , pInteger
   ]
@@ -77,8 +100,17 @@ pExpression :: Parser Expression
 pExpression = makeExprParser pTerm operatorTable
 
 -- Top level parser that is used to parse user input.
-pDeriv :: Parser Derivation
+{-pDeriv :: Parser Derivation
 pDeriv = do _ <- symbol "deriv"
             v <- pVariable
             expr <- pExpression
             return (Derivation v expr)
+-}
+pDeriv :: Parser Expression
+pDeriv = do _ <- symbol "deriv"
+            v <- pVariable
+            expr <- pExpression
+            return (Deriv v expr)
+
+--pFunc :: Parser Expression
+--pFunc = do name <- 
