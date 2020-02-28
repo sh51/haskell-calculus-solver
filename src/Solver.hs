@@ -34,6 +34,7 @@ derive e = firstNonEmpty (map (\f -> f e) laws)
 simp :: Expression
 simp = (Deriv (Var "x") (Func "sin" (Expt (Var "x") (Const 2))))
 
+-- d/dx a = 0
 constantRule :: Law
 constantRule (Deriv _ (Const _)) = [Step "Constant Rule" (Const 0)]
 constantRule (Deriv x (Var y))
@@ -41,38 +42,33 @@ constantRule (Deriv x (Var y))
   | otherwise                    = []
 constantRule _                   = []
 
+-- d/dx x = 1
 linearRule :: Law
 linearRule expr@(Deriv x (Var y))
   | getName x == y    = [Step "Linear Rule" (Const 1)]
   | otherwise         = constantRule expr
 linearRule _          = []
 
+-- d/dx a ^ x = ln(a) * (a ^ x)
 exponentialRule :: Law
 exponentialRule (Deriv x expt@(Expt a var@(Var y)))
   | getName x == y = [Step "Exponential Rule" (Product (Func "ln" a) expt)]
   | otherwise      = constantRule (Deriv x var)
 exponentialRule _  = []
 
+-- d/dx ln(x) = 1 / x
 naturalLogRule :: Law
 naturalLogRule (Deriv x (Func "ln" var@(Var y)))
   | getName x == y = [Step "Natural Log Rule" (Division (Const 1) x)]
   | otherwise      = constantRule (Deriv x var)
 naturalLogRule _   = []
 
+-- d/dx log(x) = 1 / (x * ln(10))  -- assuming log == log_10
 logRule :: Law
 logRule (Deriv x (Func "log" var@(Var y)))
   | getName x == y    = [Step "Log Rule" (Division (Const 1) (Product x (Func "ln" (Const 10))))]
   | otherwise = constantRule (Deriv x var)
 logRule _     = []
-
-sineRule :: Law
-sineRule _ = []
-
-cosineRule :: Law
-cosineRule _ = []
-
-tangentRule :: Law
-tangentRule _ = []
 
 -- constantMultiplicationRule :: Law
 -- constantMultiplicationRule (Deriv x (Product c@(Const _) expr))
@@ -81,12 +77,14 @@ tangentRule _ = []
 --         replaceC (Step s e) = Step s (Product c e)
 -- constantMultiplicationRule _ = []
 
+-- d/dx x^a = a * (x ^ (a - 1))
 powerRule :: Law
 powerRule (Deriv x (Expt var@(Var y) expr))
   | getName x == y = [Step "Power Rule" (Product expr (Expt var (Sub expr (Const 1))))]
   | otherwise      = []
 powerRule _        = []
 
+-- d/dx a + b = a' + b'
 sumRule :: Law
 sumRule (Deriv v (Sum a b))
   = f (derive (Deriv v a)) (derive (Deriv v b))
@@ -98,6 +96,7 @@ sumRule (Deriv v (Sum a b))
                 lastLhs = expression (last lhs)
 sumRule _ = []
 
+-- d/dx a - b = a' - b'
 differenceRule :: Law
 differenceRule (Deriv v (Sub a b))
   = f (derive (Deriv v a)) (derive (Deriv v b))
