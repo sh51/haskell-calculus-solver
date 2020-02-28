@@ -11,7 +11,7 @@ import Solver
 main :: IO ()
 main = do
   putStrLn "Derivative Laws:"
-  putStrLn (show sampleLaws)
+--   putStrLn (show sampleLaws)
 --  putStrLn "Derive" ++ expr 
   -- putStrLn "= " ++ sampleLawName
   -- putStrLn expr
@@ -22,6 +22,6 @@ main = do
   --   putStrLn (show (parse pDeriv "" s))
   --   main
   putStrLn (show (parse pDeriv "" s))
-  putStrLn ("= " ++  "{ " ++ (show sampleLawName) ++ " }")
+--  putStrLn ("= " ++  "{ " ++ (show sampleLawName) ++ " }")
   putStrLn "  x"
     

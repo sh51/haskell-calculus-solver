@@ -4,11 +4,13 @@ Authors: Sihao Huang, Spencer Mitchell
 
 A calculus solver written in Haskell.
 
-Currently: Parser is running.
+Currently: Reasoner is still in progress.
 
 To build the project, run `stack build`. To test the project run `stack test`.
 
 To see parsed input from the commandline run `stack exec haskell-calculus-solver`.
+
+To test the currently implemented rules, run `stack ghci`, then `calculate simp3` (simp3 is a sample expression)
 
 ```bash
 $ stack exec haskell-calculus-solver

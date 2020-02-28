@@ -1,5 +1,11 @@
 # Changelog for haskell-calculus-solver
 
+## 0.1.2.0
+
+- Updated Parser (now supports function calls without the '$' sign)
+- Basic Reasoner (implemented sum, difference and const rules)
+- Test expressions (simp, simp2, simp3) for reasoner
+
 ## 0.1.1.0
 
 - Parser for expressions (in Parser.hs).

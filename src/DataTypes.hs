@@ -61,6 +61,7 @@ subRule (Deriv v (Sub a b))
                 lastLhs = expression (last lhs)
 subRule _ = []
 
+simp, simp2, simp3 :: Expression
 simp = (Deriv (Var "x") (Const 4))
 simp2 = (Deriv (Var "x") (Sum (Const 4) (Const 3)))
 simp3 = (Deriv (Var "x") (Sum (Const 4) (Sub (Const 2) (Const 3))))
