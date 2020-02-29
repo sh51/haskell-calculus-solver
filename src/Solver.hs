@@ -5,9 +5,6 @@ import DataTypes
 laws :: [Law]
 laws = [ naturalLogRule
        , logRule
-       , sineRule
-       , cosineRule
-       , tangentRule
        , powerRule
        , exponentialRule
        , sumRule
@@ -32,7 +29,7 @@ derive :: Expression -> [Step]
 derive e = firstNonEmpty (map (\f -> f e) laws)
 
 simp :: Expression
-simp = (Deriv (Var "x") (Func "sin" (Expt (Var "x") (Const 2))))
+simp = (Deriv (Var "x") (Expt (Var "y") (Var "x")))
 
 -- d/dx a = 0
 constantRule :: Law
@@ -49,11 +46,31 @@ linearRule expr@(Deriv x (Var y))
   | otherwise         = constantRule expr
 linearRule _          = []
 
--- d/dx a ^ x = ln(a) * (a ^ x)
+-- d/dx a ^ b = (a ^ b) * (b' * ln(a) + a' * (b / a))
 exponentialRule :: Law
-exponentialRule (Deriv x expt@(Expt a var@(Var y)))
-  | getName x == y = [Step "Exponential Rule" (Product (Func "ln" a) expt)]
-  | otherwise      = constantRule (Deriv x var)
+exponentialRule (Deriv x expt@(Expt a b))
+  = f (derive (Deriv x b)) (derive (Deriv x a))
+  where f [] _    = []
+        f _ []    = []
+        f lhs rhs = [Step "Exponential Rule" (Product
+                                              expt
+                                              (Sum
+                                               (Product (Deriv x b) (Func "ln" a))
+                                               (Product (Deriv x a) (Division b a))))] ++
+            (map replaceB' lhs) ++
+            (map replaceA' rhs)
+          where lastLhs = expression (last lhs)
+                replaceB' (Step s e) = Step s (Product
+                                               expt
+                                               (Sum
+                                                (Product e (Func "ln" a))
+                                                (Product (Deriv x a) (Division b a))))
+                replaceA' (Step s e) = Step s (Product
+                                               expt
+                                               (Sum
+                                                (Product lastLhs (Func "ln" a))
+                                                (Product e (Division b a))))
+  
 exponentialRule _  = []
 
 -- d/dx ln(x) = 1 / x
@@ -152,14 +169,14 @@ quotientRule _ = []
 chainRule :: Law
 chainRule (Deriv x func@(Func _ expr))
   = f (derive (Deriv x expr))
-  where f steps = [Step "Chain Rule" (Product derivedFunc (Deriv x expr))] ++
-              (map replaceExpr' steps)
-        replaceExpr' (Step s e) = Step s (Product derivedFunc e)
-        derivedFunc = deriveFunc func
+  where f steps                   = [Step "Chain Rule" (Product derivedFunc (Deriv x expr))] ++
+                                    (map replaceExpr' steps)
+        replaceExpr' (Step s e)   = Step s (Product derivedFunc e)
+        derivedFunc               = deriveFunc func
         deriveFunc (Func "sin" e) = Func "cos" e
         deriveFunc (Func "cos" e) = Negation (Func "sin" e)
         deriveFunc (Func "tan" e) = Expt (Func "sec" e) (Const 2)
-        deriveFunc (Func a e)   = Func (a ++ "'") e
+        deriveFunc (Func a e)     = Func (a ++ "'") e
         deriveFunc _              = undefined
         
 chainRule _ = []
