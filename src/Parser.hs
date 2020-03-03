@@ -41,16 +41,14 @@ pVariable :: Parser Expression
 pVariable = Var <$> lexeme
   ((:) <$> letterChar <*> many alphaNumChar <?> "variable")
 
--- Parse function names
-pFuncName :: Parser Expression
-pFuncName = Var <$> lexeme'
-  ((:) <$> letterChar <*> many letterChar)
-
 -- Parse function terms
 pFunc :: Parser Expression
-pFunc = do name <- pFuncName
+pFunc = do name <- pVariable
            expr <- parens pExpression
            return (Func (getName name) expr)
+
+pFuncVar :: Parser Expression
+pFuncVar = try pFunc <|> pVariable
   
 -- Parse integers.
 pInteger :: Parser Expression
@@ -90,8 +88,8 @@ prefix  name f = Prefix  (f <$ symbol name)
 pTerm :: Parser Expression
 pTerm = choice
   [ parens pExpression
-  , pFunc
-  , pVariable
+  , pFuncVar
+  -- , pVariable
   , pInteger
   ]
 
@@ -107,9 +105,11 @@ pDeriv = do _ <- symbol "deriv"
             return (Derivation v expr)
 -}
 pDeriv :: Parser Expression
-pDeriv = do _ <- symbol "deriv"
+pDeriv = do _ <- symbol "deriv("
             v <- pVariable
+            _ <- symbol ","
             expr <- pExpression
+            _ <- symbol ")"
             return (Deriv v expr)
 
 --pFunc :: Parser Expression
