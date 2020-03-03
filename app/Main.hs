@@ -25,7 +25,13 @@ main = do
   --   putStrLn (show (parse pDeriv "" s))
   --   main
   (case (parse pDeriv "" s) of
-      (Right e) -> putDoc (pretty (calculate e))
+      (Right e) -> let pprint = pretty (calculate e)
+                   in do putDoc pprint
+                         putStrLn "Your solution is saved in your-answer.md"
+                         withFile "your-answer.md" WriteMode (\h -> do 
+                                                                 hPutStrLn  h "# Your homework problem is solved!\n\n```"
+                                                                 hPutDoc h pprint
+                                                                 hPutStrLn h "```")
       (Left e) -> putStrLn (show e))
 --  putStrLn ("= " ++  "{ " ++ (show sampleLawName) ++ " }")
   -- putStrLn "  x"
