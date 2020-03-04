@@ -110,3 +110,10 @@ rwsOne l e
 
 generateLaws :: [String] -> [Law]
 generateLaws = map (extract . (parse pLaw ""))
+
+parExpr :: String -> Expression
+parExpr s = extract (parse pExpression "" s)
+leftLaw :: Law -> Expression
+leftLaw (Law _ e1 _) = e1
+rightLaw :: Law -> Expression
+rightLaw (Law _ _ e2) = e2
