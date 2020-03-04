@@ -19,6 +19,7 @@ inputLaws = [
   "Simplification Law 0: x + 0 = x"
   , "Simplification Law 1: 0 + x = x"
   , "Simplification Law 2: 0 * x = 0"
+  , "Sum of derivatives: deriv(x, a + b) = deriv(x, a) + deriv(x, b)"
   ]
 laws :: [Law']
 laws = map (extract.(parse pLaw "")) inputLaws
@@ -61,12 +62,26 @@ pVariable = Var <$> lexeme
 
 -- Parse function terms
 pFunc :: Parser Expression
-pFunc = do name <- pVariable
-           expr <- parens pExpression
-           return (Func (getName name) expr)
+--pFunc = do name <- pVariable
+--           expr <- parens pExpression
+--           return (Func (getName name) expr)
+pFunc = Func <$> lexeme
+  ((:) <$> letterChar <*> many alphaNumChar)
+  <*> (parens pExpression)
+
+-- Parse deriv terms
+pDeriv :: Parser Expression
+{-pDeriv = do _ <- symbol "deriv("
+            v <- pVariable
+            _ <- symbol ","
+            expr <- pExpression
+            _ <- symbol ")"
+            return (Deriv v expr)
+            -}
+pDeriv = pure Deriv <* symbol "deriv(" <*> pVariable <* symbol "," <*> pExpression <* symbol ")" 
 
 pFuncVar :: Parser Expression
-pFuncVar = try pFunc <|> pVariable
+pFuncVar = try pDeriv <|> try pFunc <|> pVariable
   
 -- Parse integers.
 pInteger :: Parser Expression
@@ -107,7 +122,7 @@ pTerm :: Parser Expression
 pTerm = choice
   [ parens pExpression
   , pFuncVar
-  -- , pVariable
+--  , pVariable
   , pInteger
   ]
 
@@ -116,19 +131,3 @@ pExpression :: Parser Expression
 pExpression = makeExprParser pTerm operatorTable
 
 -- Top level parser that is used to parse user input.
-{-pDeriv :: Parser Derivation
-pDeriv = do _ <- symbol "deriv"
-            v <- pVariable
-            expr <- pExpression
-            return (Derivation v expr)
--}
-pDeriv :: Parser Expression
-pDeriv = do _ <- symbol "deriv("
-            v <- pVariable
-            _ <- symbol ","
-            expr <- pExpression
-            _ <- symbol ")"
-            return (Deriv v expr)
-
---pFunc :: Parser Expression
---pFunc = do name <- 
