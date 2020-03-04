@@ -18,8 +18,10 @@ data Calculation = Calculation Expression [Step] deriving (Show)
 data Step = Step { lawName    :: String
                  , expression :: Expression
                  } deriving (Eq, Show)
-type Law = Expression -> [Step]
-data Law' = Law' String Expression Expression deriving (Show)
+-- type Law = Expression -> [Step]
+data Law = Law String Expression Expression deriving (Show)
+
+type Subst = (String, Expression)
 
 getName :: Expression -> String
 getName (Var name) = name
@@ -37,3 +39,5 @@ exprLength (Expt a b) = (exprLength a) + (exprLength b)
 exprLength (Func _ a) = 1 + (exprLength a)
 exprLength (Prime a) = exprLength a
 exprLength (Deriv _ a) = exprLength a
+
+-- 0 + (0 + 1)

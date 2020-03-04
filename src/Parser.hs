@@ -21,8 +21,11 @@ inputLaws = [
   , "Simplification Law 2: 0 * x = 0"
   , "Sum of derivatives: deriv(x, a + b) = deriv(x, a) + deriv(x, b)"
   ]
-laws :: [Law']
+laws :: [Law]
 laws = map (extract.(parse pLaw "")) inputLaws
+-- sample expressions
+expr1 :: Expression
+expr1 = Deriv (Var "x") (Sum (Var "x") (Sum (Expt (Var "x") (Const 2)) (Const 7)))
 
 -- Space consumer.
 sc :: Parser ()
@@ -52,8 +55,8 @@ upto :: Char -> Parser String
 upto c = (char c *> return []) <|> ((:) <$> anySingle <*> upto c)
 
 -- Parse Laws
-pLaw :: Parser Law'
-pLaw = Law' <$> lexeme (upto ':') <*> pExpression <* symbol "="  <*> pExpression
+pLaw :: Parser Law
+pLaw = Law <$> lexeme (upto ':') <*> pExpression <* symbol "="  <*> pExpression
 
 -- Parse variable.
 pVariable :: Parser Expression
