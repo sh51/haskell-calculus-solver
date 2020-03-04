@@ -19,3 +19,8 @@ shortest (x:xs) = f (exprLength (expression (last x))) y
 
 stepper :: ([[Step]] -> [Step]) -> [Law] -> (Expression -> [Step])
 stepper filterFunc laws = (\e -> filterFunc (map (\f -> f e) laws))
+
+-- For testing
+extract :: Either a b -> b
+extract (Right e) = e
+extract _ = undefined

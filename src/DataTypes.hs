@@ -19,6 +19,7 @@ data Step = Step { lawName    :: String
                  , expression :: Expression
                  } deriving (Eq, Show)
 type Law = Expression -> [Step]
+data Law' = Law' String Expression Expression deriving (Show)
 
 getName :: Expression -> String
 getName (Var name) = name

@@ -9,9 +9,19 @@ import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 
 import DataTypes
+import Utils
 
 type Parser = Parsec Void String
 
+-- Add laws here
+inputLaws :: [String]
+inputLaws = [
+  "Simplification Law 0: x + 0 = x"
+  , "Simplification Law 1: 0 + x = x"
+  , "Simplification Law 2: 0 * x = 0"
+  ]
+laws :: [Law']
+laws = map (extract.(parse pLaw "")) inputLaws
 
 -- Space consumer.
 sc :: Parser ()
@@ -35,6 +45,14 @@ lexeme = L.lexeme sc
 
 symbol :: String -> Parser String
 symbol = L.symbol sc
+
+-- upto
+upto :: Char -> Parser String
+upto c = (char c *> return []) <|> ((:) <$> anySingle <*> upto c)
+
+-- Parse Laws
+pLaw :: Parser Law'
+pLaw = Law' <$> lexeme (upto ':') <*> pExpression <* symbol "="  <*> pExpression
 
 -- Parse variable.
 pVariable :: Parser Expression
