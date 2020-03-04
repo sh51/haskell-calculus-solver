@@ -1,6 +1,7 @@
 module Utils where
 
 import Data.List
+import Data.Char
 import Text.Megaparsec (parse)
 
 import DataTypes
@@ -33,7 +34,13 @@ extract _ = undefined
 
 -- match healper
 mhp :: Expression -> Expression -> Expression -> Expression -> [Subst]
-mhp e1 e2 e3 e4 = (nub.concat) [[m1,m2]| m1 <- match e1 e3, m2 <- match e2 e4, compatible m1 m2]
+mhp e1 e2 e3 e4 = (nub.concat) [filterNums m1 m2| m1 <- match e1 e3, m2 <- match e2 e4, compatible m1 m2]
+  where filterNums (x, a) (y, b)
+          | isNum x && isNum y = []
+          | isNum x = [(y, b)]
+          | isNum y = [(x, a)]
+          | otherwise = [(x, a), (y, b)]
+
 -- matching and binding variables
 match :: Expression -> Expression -> [Subst]
 match (Var v) e = [(v, e)]
@@ -50,8 +57,8 @@ match (Func e1 e2) (Func e3 e4) = mhp e1 e2 e3 e4
 match (Deriv e1 e2) (Deriv e3 e4) = mhp e1 e2 e3 e4
 match _ _ = []
 
--- isNum :: String -> Bool
--- isNum = all isDigit
+isNum :: String -> Bool
+isNum = all isDigit
 
 -- apply :: Subst -> Expression -> Expression
 -- apply sub@(v, _) e
@@ -60,6 +67,7 @@ match _ _ = []
 
 apply :: Subst -> Expression -> Expression
 apply (x, s) a@(Var y)
+  -- | isNum x = 
   | x == y = s
   | otherwise = a
 apply (x, s) a@(Const y)
