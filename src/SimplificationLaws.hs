@@ -1,5 +1,6 @@
 module SimplificationLaws where
 
+{-
 import DataTypes
 import Utils
 
@@ -105,3 +106,5 @@ nonRedundantStep :: Step -> [Step] -> [Step]
 nonRedundantStep unique rest
   | elem unique rest = []
   | otherwise        = unique:rest
+
+-}

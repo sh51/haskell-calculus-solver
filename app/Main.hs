@@ -24,6 +24,8 @@ main = do
   -- when (s /= "") $ do
   --   putStrLn (show (parse pDeriv "" s))
   --   main
+  return ()
+{-
   (case (parse pDeriv "" s) of
       (Right e) -> let pprint = pretty (calculate e)
                    in do putDoc pprint
@@ -36,3 +38,4 @@ main = do
 --  putStrLn ("= " ++  "{ " ++ (show sampleLawName) ++ " }")
   -- putStrLn "  x"
     
+-}

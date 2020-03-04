@@ -23,7 +23,7 @@ instance Pretty Expression where
   pretty (Division a b) = lparen <> pretty a <> pretty " / " <> pretty b <> rparen
   pretty (Expt a b) = lparen <> pretty a <> pretty "^" <> pretty b <> rparen
   pretty (Func f e) = pretty f <> lparen <> pretty e <> rparen
-  pretty (Prime e) = pretty e <> pretty "'"
+--   pretty (Prime e) = pretty e <> pretty "'"
   pretty (Deriv d e) = pretty ("d/d" ++ (getName d)) <> space <> pretty e
 
 instance Pretty Step where

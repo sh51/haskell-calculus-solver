@@ -1,5 +1,5 @@
 module DerivativeLaws where
-
+{-
 import DataTypes
 import Utils
 
@@ -174,3 +174,4 @@ chainRule _ = []
 fallBackRule :: Law
 fallBackRule (Deriv _ expr) = [Step "Prime Rule" (Prime expr)]
 fallBackRule _              = []
+-}

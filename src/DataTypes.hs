@@ -10,7 +10,7 @@ data Expression
   | Division Expression Expression
   | Expt     Expression Expression
   | Func     String Expression -- Ensure first expression is (Var String)
-  | Prime    Expression        -- Fall back during derivations.
+--  | Prime    Expression        -- Fall back during derivations.
   | Deriv    Expression Expression -- expression that needs further calculation
   deriving (Eq, Show)
 
@@ -19,7 +19,7 @@ data Step = Step { lawName    :: String
                  , expression :: Expression
                  } deriving (Eq, Show)
 -- type Law = Expression -> [Step]
-data Law = Law String Expression Expression deriving (Show)
+data Law = Law {lname :: String, expr1 :: Expression, expr2 :: Expression} deriving (Eq, Show)
 
 type Subst = (String, Expression)
 
@@ -27,6 +27,7 @@ getName :: Expression -> String
 getName (Var name) = name
 getName _ = undefined
 
+{-
 exprLength :: Expression -> Integer
 exprLength (Var _) = 1
 exprLength (Const _) = 1
@@ -39,5 +40,6 @@ exprLength (Expt a b) = (exprLength a) + (exprLength b)
 exprLength (Func _ a) = 1 + (exprLength a)
 exprLength (Prime a) = exprLength a
 exprLength (Deriv _ a) = exprLength a
+-}
 
 -- 0 + (0 + 1)
