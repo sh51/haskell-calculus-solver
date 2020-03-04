@@ -1,8 +1,10 @@
 module Utils where
 
 import Data.List
-import Data.Char
+import Text.Megaparsec (parse)
+
 import DataTypes
+import Parser
 
 firstNonEmpty :: [[Step]] -> [Step]
 firstNonEmpty [] = []
@@ -38,43 +40,65 @@ match (Var v) e = [(v, e)]
 match (Const a) (Const b)
   | a == b = [(show a, Const b)]
   | otherwise = []
+match (Negation e1) (Negation e2) =  match e1 e2
 match (Sum e1 e2) (Sum e3 e4) = mhp e1 e2 e3 e4
 match (Sub e1 e2) (Sub e3 e4) = mhp e1 e2 e3 e4
-match (Func name1 e1) (Func name2 e2)
-  | name1 == name2 = match e1 e2
-  | otherwise = []
--- TD
+match (Product e1 e2) (Product e3 e4) = mhp e1 e2 e3 e4
+match (Division e1 e2) (Division e3 e4) = mhp e1 e2 e3 e4
+match (Expt e1 e2) (Expt e3 e4) = mhp e1 e2 e3 e4
+match (Func e1 e2) (Func e3 e4) = mhp e1 e2 e3 e4
+match (Deriv e1 e2) (Deriv e3 e4) = mhp e1 e2 e3 e4
+match _ _ = []
+
+-- isNum :: String -> Bool
+-- isNum = all isDigit
+
+-- apply :: Subst -> Expression -> Expression
+-- apply sub@(v, _) e
+--   | isNum v = e
+--   | otherwise = applyVar sub e
 
 apply :: Subst -> Expression -> Expression
-apply sub@(v, s) e
-  | isDigit (head v) = e
-  | otherwise = case e of
-      (Var a)
-        | v == a -> s
-        | otherwise -> Var a
-      (Product e1 e2) -> Product (apply sub e1) (apply sub e2)
-  -- TD
+apply (x, s) a@(Var y)
+  | x == y = s
+  | otherwise = a
+apply (x, s) a@(Const y)
+  | x == show y = s
+  | otherwise = a
+apply sub (Negation e1) = Negation (apply sub e1)
+apply sub (Sum e1 e2) = Sum (apply sub e1) (apply sub e2)
+apply sub (Sub e1 e2) = Sub (apply sub e1) (apply sub e2)
+apply sub (Product e1 e2) = Product (apply sub e1) (apply sub e2)
+apply sub (Division e1 e2) = Division (apply sub e1) (apply sub e2)
+apply sub (Expt e1 e2) = Expt (apply sub e1) (apply sub e2)
+apply sub (Func e1 e2) = Product (apply sub e1) (apply sub e2)
+apply sub (Deriv e1 e2) = Deriv e1 (apply sub e2)
 
 compatible :: Subst -> Subst -> Bool
 compatible (v1, s1) (v2, s2)
   | v1 == v2 = s1 == s2
   | otherwise = True
 
--- patMTop :: Law -> Expression -> [Step]
--- patMTop (Law lawname le1 le2) e3 = map (\e -> Step lawname e) [apply sub le2
---                                                      | sub <- match le1 e3]
 patMTop :: Law -> Expression -> [Expression]
-patMTop (Law lawname le1 le2) e3 = [apply sub le2 | sub <- match le1 e3]
--- rwsHelper :: Expression -> Expression -> Expression -> Expression -> Expression -> [Step]
--- rwsHelper f = 
+patMTop (Law _ le1 le2) e3 = [apply sub le2 | sub <- match le1 e3]
 
 rws :: [Law] -> Expression -> [Step]
-rws ls e = (concat.map (\l ->map (Step (lname l)) (rwsOne l e))) ls
+rws ls e = (concat.map (\l ->map (\e' -> (Step (lname l) e')) (rwsOne l e))) ls
   
 rwsOne :: Law -> Expression -> [Expression]
--- rwsOne ls e = map (\e -> patMTop l e) ls ++ case e of
-rwsOne l e = patMTop l e ++ case e of
-  (Sum e1 e2) -> [Sum e1' e2 | e1' <- rwsOne l e1] ++ [Sum e1 e2' | e2' <- rwsOne l e2]
--- TD
-  
+rwsOne l e
+  = patMTop l e ++
+    case e of
+      (Var _) -> []
+      (Const _) -> []
+      (Negation e') -> [Negation e'' | e'' <- rwsOne l e']
+      (Sum e1 e2) -> [Sum e1' e2 | e1' <- rwsOne l e1] ++ [Sum e1 e2' | e2' <- rwsOne l e2]
+      (Sub e1 e2) -> [Sub e1' e2 | e1' <- rwsOne l e1] ++ [Sub e1 e2' | e2' <- rwsOne l e2]
+      (Product e1 e2) -> [Product e1' e2 | e1' <- rwsOne l e1] ++ [Product e1 e2' | e2' <- rwsOne l e2]
+      (Division e1 e2) -> [Division e1' e2 | e1' <- rwsOne l e1] ++ [Division e1 e2' | e2' <- rwsOne l e2]
+      (Expt e1 e2) -> [Expt e1' e2 | e1' <- rwsOne l e1] ++ [Expt e1 e2' | e2' <- rwsOne l e2]
+      (Func e1 e2) -> [Func e1' e2 | e1' <- rwsOne l e1] ++ [Func e1 e2' | e2' <- rwsOne l e2]
+      (Deriv e1 e2) -> [Deriv e1' e2 | e1' <- rwsOne l e1] ++ [Deriv e1 e2' | e2' <- rwsOne l e2]
 
+generateLaws :: [String] -> [Law]
+generateLaws = map (extract . (parse pLaw ""))

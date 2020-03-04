@@ -9,7 +9,7 @@ data Expression
   | Product  Expression Expression
   | Division Expression Expression
   | Expt     Expression Expression
-  | Func     String Expression -- Ensure first expression is (Var String)
+  | Func     Expression Expression -- Ensure first expression is (Var String)
 --  | Prime    Expression        -- Fall back during derivations.
   | Deriv    Expression Expression -- expression that needs further calculation
   deriving (Eq, Show)

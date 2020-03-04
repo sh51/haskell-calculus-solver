@@ -9,23 +9,8 @@ import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 
 import DataTypes
-import Utils
 
 type Parser = Parsec Void String
-
--- Add laws here
-inputLaws :: [String]
-inputLaws = [
-  "Simplification Law 0: x + 0 = x"
-  , "Simplification Law 1: 0 + x = x"
-  , "Simplification Law 2: 0 * x = 0"
-  , "Sum of derivatives: deriv(x, a + b) = deriv(x, a) + deriv(x, b)"
-  ]
-laws :: [Law]
-laws = map (extract.(parse pLaw "")) inputLaws
--- sample expressions
-expr1 :: Expression
-expr1 = Deriv (Var "x") (Sum (Var "x") (Sum (Expt (Var "x") (Const 2)) (Const 7)))
 
 -- Space consumer.
 sc :: Parser ()
@@ -69,7 +54,8 @@ pFunc :: Parser Expression
 --           expr <- parens pExpression
 --           return (Func (getName name) expr)
 pFunc = Func <$> lexeme
-  ((:) <$> letterChar <*> many alphaNumChar)
+  -- ((:) <$> letterChar <*> many alphaNumChar)
+  pVariable
   <*> (parens pExpression)
 
 -- Parse deriv terms
@@ -132,5 +118,3 @@ pTerm = choice
 -- Expression parser.
 pExpression :: Parser Expression
 pExpression = makeExprParser pTerm operatorTable
-
--- Top level parser that is used to parse user input.
