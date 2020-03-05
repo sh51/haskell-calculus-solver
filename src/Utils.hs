@@ -53,7 +53,10 @@ match (Sub e1 e2) (Sub e3 e4) = mhp e1 e2 e3 e4
 match (Product e1 e2) (Product e3 e4) = mhp e1 e2 e3 e4
 match (Division e1 e2) (Division e3 e4) = mhp e1 e2 e3 e4
 match (Expt e1 e2) (Expt e3 e4) = mhp e1 e2 e3 e4
-match (Func e1 e2) (Func e3 e4) = mhp e1 e2 e3 e4
+-- match (Func e1 e2) (Func e3 e4) = mhp e1 e2 e3 e4
+match (Func e1 e2) (Func e3 e4)
+  | e1 == e3 = match e2 e4
+  | otherwise = []
 match (Deriv e1 e2) (Deriv e3 e4) = mhp e1 e2 e3 e4
 match _ _ = []
 
@@ -79,7 +82,8 @@ apply sub (Sub e1 e2) = Sub (apply sub e1) (apply sub e2)
 apply sub (Product e1 e2) = Product (apply sub e1) (apply sub e2)
 apply sub (Division e1 e2) = Division (apply sub e1) (apply sub e2)
 apply sub (Expt e1 e2) = Expt (apply sub e1) (apply sub e2)
-apply sub (Func e1 e2) = Product (apply sub e1) (apply sub e2)
+-- apply sub (Func e1 e2) = Product (apply sub e1) (apply sub e2)
+apply sub (Func e1 e2) = Func e1 (apply sub e2)
 apply sub (Deriv e1 e2) = Deriv e1 (apply sub e2)
 
 compatible :: Subst -> Subst -> Bool
