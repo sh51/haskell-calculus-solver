@@ -88,7 +88,6 @@ compatible (v1, s1) (v2, s2)
   | otherwise = True
 
 patMTop :: Law -> Expression -> [Expression]
--- patMTop (Law _ le1 le2) e3 = [apply sub le2 | sub <- match le1 e3]
 patMTop (Law _ le1 le2) e3 = if null res then [] else [foldr apply le2 (match le1 e3)]
                              where res = match le1 e3
 
