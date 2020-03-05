@@ -14,6 +14,7 @@ derivationLaws'
     -- , "Chain rule: deriv(x, f(a)) = (deriv(a, f(a))) * (deriv(x, a))"
     , "Sine rule: deriv(x, sin(x)) = cos(x)"
     , "Cosine rule: deriv(x, cos(x)) = -sin(x)"
+    , "Tangent rule: deriv(x, tan(x)) = 1/(cos(x)^2))"
     , "Natural log rule: deriv(x, ln(x)) = 1/x"
     , "Linear rule: deriv(x, x) = 1"
     , "Constant rule: deriv(x, c) = 0"

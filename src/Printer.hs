@@ -24,4 +24,4 @@ instance Pretty Expression where
   pretty (Deriv d e) = pretty ("d/d" ++ (getName d)) <> space <> pretty e
 
 instance Pretty Step where
-  pretty (Step s e) = indent 2 (pretty "{" <> pretty s <> pretty "}") <> line <> pretty e
+  pretty (Step s e) = pretty "=" <> indent 1 (pretty "{" <> pretty s <> pretty "}") <> line <> pretty e

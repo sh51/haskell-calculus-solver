@@ -12,6 +12,8 @@ simplificationLaws'
     , "Identity: 1 * x = x"
     , "Multiplication by 0: x * 0 = 0"
     , "Multiplication by 0: 0 * x = 0"
+    , "Trigonometric Identity: sin(x)^2 + cos(x)^2 = 1"
+    , "Tangent definition: sin(x) / cos(x) = tan(x)"
     ]
 
 simplificationLaws :: [Law]
