@@ -5,8 +5,9 @@ import Utils
 
 derivationLaws' :: [String]
 derivationLaws'
-  = [ "Exponential rule: deriv(x, a ^ b) = (ln(a) * deriv(x, b)) + (deriv(x, a) * (b / a))"
-    , "Sum of derivatives: deriv(x, a + b) = deriv(x, a) + deriv(x, b)"
+  = [--  "Power rule: deriv(x, x ^ a) = a * (x ^ (a - 1))"
+    -- , "Exponential rule: deriv(x, a ^ x) = (a ^ x) * ln(a)"
+     "Sum of derivatives: deriv(x, a + b) = deriv(x, a) + deriv(x, b)"
     , "Difference of derivatives: deriv(x, a - b) = deriv(x, a) - deriv(x, b)"
     , "Product of derivatives: deriv(x, a * b) = (a * deriv(x, b)) + (deriv(x, a) * b)"
     , "Division of derivatives: deriv(x, a / b) = ((deriv(x, a) * b) - (a * (deriv(x, b)))) / (b ^ 2)"
