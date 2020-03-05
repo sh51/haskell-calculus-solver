@@ -6,9 +6,12 @@ import Utils
 -- Add laws here
 simplificationLaws' :: [String]
 simplificationLaws'
-  = [ "Simplification Law 0: x + 0 = x"
-    , "Simplification Law 1: 0 + x = x"
-    , "Simplification Law 2: 0 * x = 0"
+  = [ "Identity: x + 0 = x"
+    , "Identity: 0 + x = x"
+    , "Identity: x * 1 = x"
+    , "Identity: 1 * x = x"
+    , "Multiplication by 0: x * 0 = 0"
+    , "Multiplication by 0: 0 * x = 0"
     ]
 
 simplificationLaws :: [Law]

@@ -1,16 +1,20 @@
 module Solver where
 
-import Control.Monad
 import DataTypes
 import DerivativeLaws
 import SimplificationLaws
 import Utils
 
-simplify :: Expression -> [Step]
-simplify e = f steps
+simplify' :: Expression -> [Step]
+simplify' e = f steps
   where steps = rws simplificationLaws e
         f [] = []
-        f (x:_) = x:(simplify (expression x))
+        f (x:_) = x:(simplify' (expression x))
+
+simplify :: Expression -> [Step]
+simplify e = f (simplify' e)
+  where f [] = []
+        f e' = [Step "Simplification" (expression $ last e')]
 
 derive :: Expression -> [Step]
 derive e = f steps
