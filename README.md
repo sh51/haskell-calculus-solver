@@ -4,18 +4,35 @@ Authors: Sihao Huang, Spencer Mitchell
 
 A calculus solver written in Haskell.
 
-Currently: Reasoner is still in progress.
+Currently: Chain rule and Exponential/Power rule are still not implemented.
 
-To build the project, run `stack build`. To test the project run `stack test`.
+To add new rules, update derivationLaws (in DerivationLaws.hs) and simplificationLaws (in SimplificationLaws.hs).
 
-To see parsed input from the commandline run `stack exec haskell-calculus-solver`.
+To see the sample output, run `stack ghci`, then execute `test simp`.
 
-To test the currently implemented rules, run `stack ghci`, then `calculate simp3` (simp3 is a sample expression)
+To test the project, run `stack ghci`, and execute `test STRING` to see the calculation for an expression STRING.
+
+
+
+
 
 ```bash
-$ stack exec haskell-calculus-solver
-> deriv x x ^ 2 + 2 * x
-Right (Derivation (Var "x") (Sum (Expt (Var "x") (Const 2)) (Product (Const 2) (Var "x"))))
->      # Hitting return with no input will exit the program.
-$
-```
+$ stack ghci
+*Main DataTypes DerivativeLaws Parser Printer SimplificationLaws Solver Utils> test simp
+d/dx ((5 * x) + (6 / 7))
+  {Sum of derivatives}
+(d/dx (5 * x) + d/dx (6 / 7))
+  {Product of derivatives}
+(((5 * d/dx x) + (d/dx 5 * x)) + d/dx (6 / 7))
+  {Division of derivatives}
+(((5 * d/dx x) + (d/dx 5 * x)) + (((d/dx 6 * 7) - (6 * d/dx 7)) / (7^2)))
+  {Linear rule}
+(((5 * 1) + (d/dx 5 * x)) + (((d/dx 6 * 7) - (6 * d/dx 7)) / (7^2)))
+  {Constant rule}
+(((5 * 1) + (0 * x)) + (((d/dx 6 * 7) - (6 * d/dx 7)) / (7^2)))
+  {Constant rule}
+(((5 * 1) + (0 * x)) + (((0 * 7) - (6 * d/dx 7)) / (7^2)))
+  {Constant rule}
+(((5 * 1) + (0 * x)) + (((0 * 7) - (6 * 0)) / (7^2)))
+  {Simplification}
+(5 + ((0 - 0) / (7^2)))

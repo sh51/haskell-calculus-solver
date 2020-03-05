@@ -33,5 +33,7 @@ calculate e = Calculation e (derivation ++ (simplify (f e derivation)))
         f _ steps = expression (last steps)
 
 
-simp :: Expression
-simp = (Deriv (Var "x") (Expt (Var "y") (Var "x")))
+-- simp :: Expression
+-- simp = Deriv (Var "x") (Sum (Product (Const 5) (Var "x")) (Division (Const 6) (Const 7)))
+simp :: String
+simp = "deriv(x, 5*x + 6/7)"

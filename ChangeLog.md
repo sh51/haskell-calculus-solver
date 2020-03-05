@@ -1,4 +1,9 @@
 # Changelog for haskell-calculus-solver
+## 0.5.0.0
+
+- Law Parser: Laws are now configurable (Add laws in DerivationLaws.hs and SimplificationLaws.hs)
+- Pretty Printer (formatted output)
+- Added test expression simp (d/dx(5*x + 6/7))
 
 ## 0.1.2.0
 

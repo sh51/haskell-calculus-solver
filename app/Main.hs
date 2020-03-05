@@ -8,8 +8,12 @@ import Text.Megaparsec
 
 -- import DataTypes
 import Parser
-import Printer ()
+import Printer
 import Solver
+import Utils
+
+test :: String -> Doc ann
+test = prettyCalculation.calculate.parExpr
 
 main :: IO ()
 main = do
