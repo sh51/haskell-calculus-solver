@@ -3,11 +3,11 @@ module Main where
 import System.IO
 
 import Data.Text.Prettyprint.Doc
--- import Data.Text.Prettyprint.Doc.Render.Text
--- import Text.Megaparsec
+import Data.Text.Prettyprint.Doc.Render.Text
+import Text.Megaparsec
 
 -- import DataTypes
--- import Parser
+import Parser
 import Printer
 import Solver
 import Utils
@@ -24,13 +24,13 @@ main = do
   -- putStrLn expr
   putStr "> "
   hFlush stdout
-  -- s <- getLine
+  s <- getLine
   -- when (s /= "") $ do
-  --   putStrLn (show (parse pDeriv "" s))
+  -- putStrLn (show (parse pExpression "" s))
   --   main
-  return ()
-{-
-  (case (parse pDeriv "" s) of
+  -- return ()
+
+  (case (parse pExpression "" s) of
       (Right e) -> let pprint = pretty (calculate e)
                    in do putDoc pprint
                          putStrLn "Your solution is saved in your-answer.md"
@@ -41,5 +41,3 @@ main = do
       (Left e) -> putStrLn (show e))
 --  putStrLn ("= " ++  "{ " ++ (show sampleLawName) ++ " }")
   -- putStrLn "  x"
-    
--}
