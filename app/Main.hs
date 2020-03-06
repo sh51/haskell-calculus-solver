@@ -35,7 +35,7 @@ main = do
                   , "\t\tTangent:\ttan(a)"
                   , "\t\tNatural log:\tln(a)"
                   , "\t\tAnonymous functions:\tf(a)"
-                  , "\tDerivation:\tderiv(x, x ^ 2)"
+                  , "\t\tDerivation:\tderiv(x, x ^ 2)"
                   , "\t\tThe derivation function takes the variable to derive on as it's first"
                   , "\t\targument, and the expression to derive as the second argument."
                   , ""
