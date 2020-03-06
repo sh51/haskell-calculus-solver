@@ -12,7 +12,7 @@ The calculus solver takes an expression as input and outputs the steps taken
 to derive the expression.
 
 The following syntax is allowed:  
-	Addition:	a + b  
+* Addition:	a + b  
 	Subtraction:	a - b  
 	Multiplication:	a * b  
 	Division:	a / b  
