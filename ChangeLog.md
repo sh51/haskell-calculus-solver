@@ -1,4 +1,9 @@
 # Changelog for haskell-calculus-solver
+## 0.6.0.0
+- Chain Rule and Exponential Rule implemented
+- Added simplification of exponential terms (to some degree)
+- More simplification rules
+- 
 ## 0.5.0.0
 
 - Law Parser: Laws are now configurable (Add laws in DerivationLaws.hs and SimplificationLaws.hs)

@@ -34,12 +34,15 @@ extract _ = undefined
 
 -- match healper
 mhp :: Expression -> Expression -> Expression -> Expression -> [Subst]
-mhp e1 e2 e3 e4 = (nub.concat) [filterNums m1 m2| m1 <- match e1 e3, m2 <- match e2 e4, compatible m1 m2]
+{-mhp e1 e2 e3 e4 = (nub.concat) [filterNums m1 m2| m1 <- match e1 e3, m2 <- match e2 e4, compatible m1 m2]
   where filterNums (x, a) (y, b)
           | isNum x && isNum y = []
           | isNum x = [(y, b)]
           | isNum y = [(x, a)]
           | otherwise = [(x, a), (y, b)]
+-}
+-- mhp e1 e2 e3 e4 = (nub.concat) [[m1, m2] | m1 <- match e1 e3, m2 <- match e2 e4, compatible m1 m2]
+mhp e1 e2 e3 e4 = nub (combMatch (match e1 e3) (match e2 e4))
 
 -- matching and binding variables
 match :: Expression -> Expression -> [Subst]
@@ -60,8 +63,10 @@ match (Func e1 e2) (Func e3 e4)
 match (Deriv e1 e2) (Deriv e3 e4) = mhp e1 e2 e3 e4
 match _ _ = []
 
+{-
 isNum :: String -> Bool
 isNum = all isDigit
+-}
 
 -- apply :: Subst -> Expression -> Expression
 -- apply sub@(v, _) e
@@ -86,14 +91,24 @@ apply sub (Expt e1 e2) = Expt (apply sub e1) (apply sub e2)
 apply sub (Func e1 e2) = Func e1 (apply sub e2)
 apply sub (Deriv e1 e2) = Deriv e1 (apply sub e2)
 
+-- combine the matches from both sides, empty if they are incompatible
+combMatch :: [Subst] -> [Subst] -> [Subst]
+combMatch subs1@(_:_) subs2@(_:_)
+  | compatibleAll subs1 subs2 = subs1 ++ subs2
+  | otherwise = []
+combMatch _ _ = []
+
 compatible :: Subst -> Subst -> Bool
 compatible (v1, s1) (v2, s2)
   | v1 == v2 = s1 == s2
   | otherwise = True
 
+compatibleAll :: [Subst] -> [Subst] -> Bool
+compatibleAll subs1 subs2 = and [compatible sub1 sub2| sub1 <- subs1, sub2 <- subs2]
+
 patMTop :: Law -> Expression -> [Expression]
-patMTop (Law _ le1 le2) e3 = if null res then [] else [foldr apply le2 (match le1 e3)]
-                             where res = match le1 e3
+patMTop (Law _ le1 le2) e3 = if null res then [] else [foldr apply le2 res]
+                             where res = filter (not.isDigit.head.fst) (match le1 e3)
 
 rws :: [Law] -> Expression -> [Step]
 rws ls e = (concat.map (\l ->map (\e' -> (Step (lname l) e')) (rwsOne l e))) ls
@@ -123,3 +138,8 @@ leftLaw :: Law -> Expression
 leftLaw (Law _ e1 _) = e1
 rightLaw :: Law -> Expression
 rightLaw (Law _ _ e2) = e2
+leftProduct, rightProduct :: Expression -> Expression
+leftProduct (Product e _) = e
+leftProduct _ = undefined
+rightProduct (Product _ e) = e
+rightProduct _ = undefined

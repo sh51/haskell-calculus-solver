@@ -3,11 +3,11 @@ module Main where
 import System.IO
 
 import Data.Text.Prettyprint.Doc
-import Data.Text.Prettyprint.Doc.Render.Text
-import Text.Megaparsec
+-- import Data.Text.Prettyprint.Doc.Render.Text
+-- import Text.Megaparsec
 
 -- import DataTypes
-import Parser
+-- import Parser
 import Printer
 import Solver
 import Utils
@@ -24,7 +24,7 @@ main = do
   -- putStrLn expr
   putStr "> "
   hFlush stdout
-  s <- getLine
+  -- s <- getLine
   -- when (s /= "") $ do
   --   putStrLn (show (parse pDeriv "" s))
   --   main
