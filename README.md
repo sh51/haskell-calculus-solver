@@ -13,13 +13,13 @@ to derive the expression.
 
 The following syntax is allowed:  
 * Addition:	a + b  
-	Subtraction:	a - b  
-	Multiplication:	a * b  
-	Division:	a / b  
-	Exponentiation:	a ^ b  
-	Sub-expressions in parenthesis:	a + (b + c)  
-	Function calls:  
-		Sine:	sin(a)  
+* Subtraction:	a - b  
+* Multiplication:	a * b  
+* Division:	a / b  
+* Exponentiation:	a ^ b  
+* Sub-expressions in parenthesis:	a + (b + c)  
+* Function calls:  
+* Sine:	sin(a)  
 		Cosine:	cos(a)  
 		Tangent:	tan(a)  
 		Natural log:	ln(a)  
