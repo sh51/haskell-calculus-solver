@@ -12,21 +12,21 @@ The calculus solver takes an expression as input and outputs the steps taken
 to derive the expression.
 
 The following syntax is allowed:  
-* Addition:	a + b  
-* Subtraction:	a - b  
-* Multiplication:	a * b  
-* Division:	a / b  
-* Exponentiation:	a ^ b  
-* Sub-expressions in parenthesis:	a + (b + c)  
-* Function calls:  
-* Sine:	sin(a)  
-		Cosine:	cos(a)  
-		Tangent:	tan(a)  
-		Natural log:	ln(a)  
-		Anonymous functions:	f(a)  
-	Derivation:	deriv(x, x ^ 2)  
-		The derivation function takes the variable to derive on as it's first  
-		argument, and the expression to derive as the second argument.
+- Addition:	a + b  
+- Subtraction:	a - b  
+- Multiplication:	a * b  
+- Division:	a / b  
+- Exponentiation:	a ^ b  
+- Sub-expressions in parenthesis:	a + (b + c)  
+- Function calls:  
+ - Sine:	sin(a)  
+ - Cosine:	cos(a)  
+ - Tangent:	tan(a)  
+ - Natural log:	ln(a)  
+ - Anonymous functions:	f(a)  
+ - Derivation:	deriv(x, x ^ 2)  
+  __The derivation function takes the variable to derive on as it's first  
+  argument, and the expression to derive as the second argument.__
 
 The following laws and rules can be solved:  
 	Exponential rule: deriv(x, a ^ b) = a ^ b * deriv(x, ln(a) * b)  
