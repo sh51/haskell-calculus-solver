@@ -7,8 +7,10 @@ import Data.Text.Prettyprint.Doc.Render.Text
 import Text.Megaparsec
 
 -- import DataTypes
+import DerivativeLaws
 import Parser
 import Printer
+import SimplificationLaws
 import Solver
 import Utils
 
@@ -17,6 +19,27 @@ test = prettyCalculation.calculate.parExpr
 
 main :: IO ()
 main = do
+  mapM_ putStrLn ([ "Enter your calculus homework problem here and I'll solve it for you."
+                  , ""
+                  , "The following syntax is allowed:"
+                  , "\tAddition:\ta + b"
+                  , "\tSubtraction:\ta - b"
+                  , "\tMultiplication:\ta * b"
+                  , "\tDivision:\ta / b"
+                  , "\tExponentiation:\ta ^ b"
+                  , "\tSub-expressions in parenthesis:\ta + (b + c)"
+                  , "\tFunction calls:"
+                  , "\t\tSine:\tsin(a)"
+                  , "\t\tCosine:\tcos(a)"
+                  , "\t\tTangent:\ttan(a)"
+                  , "\t\tNatural log:\tln(a)"
+                  , "\t\tAnonymous functions:\tf(a)"
+                  , "\tDerivation:\tderiv(x, x ^ 2)"
+                  , "\t\tThe derivation function takes the variable to derive on as it's first"
+                  , "\t\targument, and the expression to derive as the second argument."
+                  , ""
+                  , "The following laws and rules can be solved:"
+                  ] ++ (map ((:) '\t') derivationLaws') ++ (map ((:) '\t') simplificationLaws'))
   -- putStrLn "Derivative Laws:"
 --   putStrLn (show sampleLaws)
 --  putStrLn "Derive" ++ expr 
