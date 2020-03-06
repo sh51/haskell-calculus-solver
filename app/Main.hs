@@ -40,7 +40,10 @@ main = do
                   , "\t\targument, and the expression to derive as the second argument."
                   , ""
                   , "The following laws and rules can be solved:"
-                  ] ++ (map ((:) '\t') derivationLaws') ++ (map ((:) '\t') simplificationLaws'))
+                  ]
+                  ++ (map ((:) '\t') derivationLaws')
+                  ++ (map ((:) '\t') simplificationLaws')
+                  ++ [""])
   -- Prompt user for input.
   putStr "> "
   hFlush stdout

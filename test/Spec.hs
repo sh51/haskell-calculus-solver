@@ -18,6 +18,10 @@ main = hspec $
       it "should not parse an integer" $
         parse pVariable "" `shouldFailOn` "1"
 
+    describe "pFunc" $ do
+      it "returns an Expression with Func constructor" $
+        parse pFunc "" "g(x)" `shouldParse` (Func (Var "g") (Var "x"))
+
     describe "pInteger" $ do
       it "returns an Expression with Const constructor" $
         parse pInteger "" "1" `shouldParse` (Const 1)
@@ -37,17 +41,13 @@ main = hspec $
     describe "pExpression" $ do
       it "should ensure multiplication has precedence over addition" $
         parse pExpression "" "1 + 1 * 1" `shouldParse` (Sum (Const 1) (Product (Const 1) (Const 1)))
-      it "should ensure functions have precedence over multiplication" $
-        parse pExpression "" "g $ x * 1" `shouldParse` (Product (Func (Var "g") (Var "x")) (Const 1))
-      it "should ensure exponentiation has precedence over functions" $
-        parse pExpression "" "g $ x ^ 2" `shouldParse` (Func (Var "g") (Expt (Var "x") (Const 2)))
-      it "should ensure unary operators have precedence over exponentiation" $
-        parse pExpression "" "- x ^ 2" `shouldParse` (Expt (Negation (Var "x")) (Const 2))
+      it "should ensure exponentiation has precedence over negation" $
+        parse pExpression "" "- x ^ 2" `shouldParse` (Negation (Expt (Var "x") (Const 2)))
       it "should reject malformed expressions" $
         parse pExpression "" `shouldFailOn` "^ 2 + 1"
 
     describe "pDeriv" $ do
       it "returns a Derivation" $
-        parse pDeriv "" "deriv x x ^ 2 + 1" `shouldParse` (Derivation (Var "x") (Sum (Expt (Var "x") (Const 2)) (Const 1)))
+        parse pDeriv "" "deriv(x, x ^ 2 + 1)" `shouldParse` (Deriv (Var "x") (Sum (Expt (Var "x") (Const 2)) (Const 1)))
       it "should reject misspelled deriv" $
-        parse pDeriv "" `shouldFailOn` "derv x x ^ 2 + 1"
+        parse pDeriv "" `shouldFailOn` "derv(x, x ^ 2 + 1)"
