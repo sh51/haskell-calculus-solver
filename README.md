@@ -64,7 +64,7 @@ The following laws and rules are supplied in `DerivationLaws.txt` and `Simplific
 
 * Grouping of laws: The laws are separated into two groups: Derivation Laws and Simplification Laws. Derivation Laws are used to determine the derivatives and generally have the form of "deriv(x, ...) = ".
 
-* Flexible reasoner: The laws used by the program are all configurable - Add or remove laws for a different strategy by updating the files `DerivationLaws.txt` and  `SimplificationLaws.txt`. Note the calculus solver expects these files to be in the current working directory. We have supplied these at the top level of the project with default rules.
+* Flexible reasoner: The laws used by the program are all configurable - Add or remove laws for a different strategy by updating the files `DerivationLaws.txt` and  `SimplificationLaws.txt`. __Note the calculus solver expects these files to be in the current working directory. We have supplied these at the top level of the project with default rules.__
 
 * Simplifying the result: As an attempt to simplify the results, we added one associativity law (to avoid non-termination) and a few reduction laws to make derivatives of polynomials or  terms like $x^a$ in general more compact.
 
