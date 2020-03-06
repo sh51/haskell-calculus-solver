@@ -6,7 +6,8 @@ A calculus solver written in Haskell.
 
 To build the project run `stack build`. To test the project run `stack test`.
 
-To run the project run `stack exec haskell-calculus-solver-exe`.
+To run the project run `stack exec -- haskell-calculus-solver-exe`. To print
+the simplification steps, add the `-v` flag like `stack exec -- haskell-calculus-solver-exe -v`.
 
 The calculus solver takes an expression as input and outputs the steps taken
 to derive the expression.
@@ -27,7 +28,7 @@ The following syntax is allowed:
   __The derivation function takes the variable to derive on as it's first  
   argument, and the expression to derive as the second argument.__
 
-The following laws and rules can be solved:  
+The following laws and rules are supplied in `DerivationLaws.txt` and `SimplificationLaws.txt`:  
 - Derivation Laws
   - Exponential rule: deriv(x, a ^ b) = a ^ b * deriv(x, ln(a) * b)  
   - Sum of derivatives: deriv(x, a + b) = deriv(x, a) + deriv(x, b)  
@@ -59,11 +60,11 @@ The following laws and rules can be solved:
 
 ## Special Features
 
-* Output handling: The result and intermediate steps will be nicely formatted, and a file called `your-answer.md` which saves the answer will be automatically generated. __For simplicity, the simplification steps are hidden by default. To change that, update the corresponding field in `SimplificationLaws.txt`.__
+* Output handling: The result and intermediate steps will be nicely formatted, and a file called `your-answer.md` which saves the answer will be automatically generated. __For simplicity, the simplification steps are hidden by default. To change that, pass the `-v` flag when running the executable.__
 
 * Grouping of laws: The laws are separated into two groups: Derivation Laws and Simplification Laws. Derivation Laws are used to determine the derivatives and generally have the form of "deriv(x, ...) = ".
 
-* Flexible reasoner: The laws used by the program are all configurable - Add or remove laws for a different strategy by updating the files `DerivationLaws.txt` and  `SimplificationLaws.txt`. 
+* Flexible reasoner: The laws used by the program are all configurable - Add or remove laws for a different strategy by updating the files `DerivationLaws.txt` and  `SimplificationLaws.txt`. Note the calculus solver expects these files to be in the current working directory. We have supplied these at the top level of the project with default rules.
 
 * Simplifying the result: As an attempt to simplify the results, we added one associativity law (to avoid non-termination) and a few reduction laws to make derivatives of polynomials or  terms like $x^a$ in general more compact.
 
@@ -71,8 +72,10 @@ The following laws and rules can be solved:
 ## Example
 
 ```bash
-$ stack exec haskell-calculus-solver-exe
+$ stack exec -- haskell-calculus-solver-exe
 Enter your calculus homework problem here and I'll solve it for you.
+
+Pass the -v flag when starting the program to include printing simplification steps.
 
 > deriv(x, x ^ 2 + 3 * x + 2)
 d/dx (((x^2) + (3 * x)) + 2)

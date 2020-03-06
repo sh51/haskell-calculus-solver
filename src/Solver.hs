@@ -1,35 +1,35 @@
 module Solver where
 
 import DataTypes
-import DerivativeLaws
-import SimplificationLaws
 import Utils
 
 -- Simplify the expression.
-simplify' :: Expression -> [Step]
-simplify' e = f steps
-  where steps = rws simplificationLaws e
+simplify' :: [Law] -> Expression -> [Step]
+simplify' ls e = f steps
+  where steps = rws ls e
         f [] = []
-        f (x:_) = x:(simplify' (expression x))
+        f (x:_) = x:(simplify' ls (expression x))
 
 -- Wrapper around simplify'.
 -- Adds the "Simplification" step.
-simplify :: Expression -> [Step]
-simplify e = f (simplify' e)
+simplify :: Bool -> [Law] -> Expression -> [Step]
+simplify verbose ls e = f (simplify' ls e)
   where f [] = []
-        f e' = [Step "Simplification" (expression $ last e')]
+        f e' = if verbose
+               then e'
+               else [Step "Simplification" (expression $ last e')]
 
 -- Derive the expression.
-derive :: Expression -> [Step]
-derive e = f steps
-  where steps = rws derivationLaws e
+derive :: [Law] -> Expression -> [Step]
+derive ls e = f steps
+  where steps = rws ls e
         f [] = []
-        f (x:_) = x:(derive (expression x))
+        f (x:_) = x:(derive ls (expression x))
 
 -- Calculate the expression from beginning to end.
-calculate :: Expression -> Calculation
-calculate e = Calculation e (derivation ++ (simplify (f e derivation)))
-  where derivation = (derive e)
+calculate :: [Law] -> [Law] -> Expression -> Bool -> Calculation
+calculate dLaws sLaws e verbose = Calculation e (derivation ++ (simplify verbose sLaws (f e derivation)))
+  where derivation = (derive dLaws e)
         -- Select the expression from the last step if it exists,
         -- otherwise return e'.
         f e' [] = e'

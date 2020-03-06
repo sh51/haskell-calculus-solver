@@ -101,3 +101,10 @@ generateLaws = map (extract . (parse pLaw ""))
 -- helper parser to parse laws
 parExpr :: String -> Expression
 parExpr s = extract (parse pExpression "" s)
+
+-- read laws from file.
+lawsFromFile :: String -> IO [String]
+lawsFromFile filename
+  = do content <- readFile filename
+       let ls = lines content
+       return ls
