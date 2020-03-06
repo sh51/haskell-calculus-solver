@@ -19,6 +19,7 @@ test = prettyCalculation.calculate.parExpr
 
 main :: IO ()
 main = do
+  -- Output instructions, syntax, and laws.
   mapM_ putStrLn ([ "Enter your calculus homework problem here and I'll solve it for you."
                   , ""
                   , "The following syntax is allowed:"
@@ -40,20 +41,13 @@ main = do
                   , ""
                   , "The following laws and rules can be solved:"
                   ] ++ (map ((:) '\t') derivationLaws') ++ (map ((:) '\t') simplificationLaws'))
-  -- putStrLn "Derivative Laws:"
---   putStrLn (show sampleLaws)
---  putStrLn "Derive" ++ expr 
-  -- putStrLn "= " ++ sampleLawName
-  -- putStrLn expr
+  -- Prompt user for input.
   putStr "> "
   hFlush stdout
   s <- getLine
-  -- when (s /= "") $ do
-  -- putStrLn (show (parse pExpression "" s))
-  --   main
-  -- return ()
-
+  -- Parse the input.
   (case (parse pExpression "" s) of
+      -- Print the solution to screen and save as markdown to file.
       (Right e) -> let pprint = pretty (calculate e)
                    in do putDoc pprint
                          putStrLn "Your solution is saved in your-answer.md"
@@ -61,6 +55,5 @@ main = do
                                                                  hPutStrLn  h "# Your homework problem is solved!\n\n```"
                                                                  hPutDoc h pprint
                                                                  hPutStrLn h "```")
+      -- Print the errors.
       (Left e) -> putStrLn (show e))
---  putStrLn ("= " ++  "{ " ++ (show sampleLawName) ++ " }")
-  -- putStrLn "  x"

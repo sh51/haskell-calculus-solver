@@ -3,7 +3,7 @@ module SimplificationLaws where
 import DataTypes
 import Utils
 
--- Add laws here
+-- Simplification laws.
 simplificationLaws' :: [String]
 simplificationLaws'
   = [ "Identity: x + 0 = x"
@@ -23,9 +23,6 @@ simplificationLaws'
     , "Zero divided: 0 / x = 0"
     ]
 
+-- The transformation of simplificationLaws' from String to Law.
 simplificationLaws :: [Law]
 simplificationLaws = generateLaws simplificationLaws'
-
--- sample expressions
-expr1 :: Expression
-expr1 = Deriv (Var "x") (Sum (Var "x") (Sum (Expt (Var "x") (Const 2)) (Const 7)))

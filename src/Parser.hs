@@ -18,6 +18,7 @@ sc = L.space
   space1
   empty
   empty
+
 -- Empty sc
 sc' :: Parser ()
 sc' = L.space
@@ -29,9 +30,11 @@ sc' = L.space
 lexeme' :: Parser a -> Parser a
 lexeme' = L.lexeme sc'
 
+-- lexeme that consumes at least one space.
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme sc
 
+-- Turn a String into a Parser String that selects for that String.
 symbol :: String -> Parser String
 symbol = L.symbol sc
 
@@ -50,25 +53,17 @@ pVariable = Var <$> lexeme
 
 -- Parse function terms
 pFunc :: Parser Expression
---pFunc = do name <- pVariable
---           expr <- parens pExpression
---           return (Func (getName name) expr)
 pFunc = Func <$> lexeme
-  -- ((:) <$> letterChar <*> many alphaNumChar)
   pVariable
   <*> (parens pExpression)
 
 -- Parse deriv terms
 pDeriv :: Parser Expression
-{-pDeriv = do _ <- symbol "deriv("
-            v <- pVariable
-            _ <- symbol ","
-            expr <- pExpression
-            _ <- symbol ")"
-            return (Deriv v expr)
-            -}
 pDeriv = pure Deriv <* symbol "deriv(" <*> pVariable <* symbol "," <*> pExpression <* symbol ")" 
 
+-- Parse either a function or a variable.
+-- Try in the order of derivative, function, variable since a variable
+-- can match deriv or a function name and a function can match deriv.
 pFuncVar :: Parser Expression
 pFuncVar = try pDeriv <|> try pFunc <|> pVariable
   
@@ -88,8 +83,6 @@ operatorTable =
   , [ prefix "-" Negation
     , prefix "+" id
     ] 
---  , [ binary "$" Func
---    ]
   , [ binary "*" Product
     , binary "/" Division
     ]
@@ -111,7 +104,6 @@ pTerm :: Parser Expression
 pTerm = choice
   [ parens pExpression
   , pFuncVar
---  , pVariable
   , pInteger
   ]
 

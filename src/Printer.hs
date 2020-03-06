@@ -5,6 +5,7 @@ import Data.Text.Prettyprint.Doc
 
 import DataTypes
 
+-- Wrapper function to prettify a Calculation.
 prettyCalculation :: Calculation -> Doc ann
 prettyCalculation c = pretty c
 
