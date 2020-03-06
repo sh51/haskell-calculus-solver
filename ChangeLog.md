@@ -1,4 +1,12 @@
 # Changelog for haskell-calculus-solver
+## 1.0.0.0
+- Completed README
+- Feature: saving output to files
+- Feature: showing intermediate steps for simplification
+- Feature: configuring laws from file input
+- `stack test` for function tests
+
+
 ## 0.6.0.0
 - Chain Rule and Exponential Rule implemented
 - Added simplification of exponential terms (to some degree)
