@@ -23,7 +23,6 @@ The following syntax is allowed:
   - Cosine:	cos(a)  
   - Tangent:	tan(a)  
   - Natural log:	ln(a)  
-  - Anonymous functions:	f(a)  
   - Derivation:	deriv(x, x ^ 2)  
   __The derivation function takes the variable to derive on as it's first  
   argument, and the expression to derive as the second argument.__
@@ -60,11 +59,11 @@ The following laws and rules can be solved:
 
 ## Special Features
 
-* Output handling: The result and intermediate steps will be nicely formatted, and a markdown file called `your-answer.md` which saves the answer will be automatically generated.
+* Output handling: The result and intermediate steps will be nicely formatted, and a file called `your-answer.md` which saves the answer will be automatically generated. __For simplicity, the simplification steps are hidden by default. To change that, update the corresponding field in `SimplificationLaws.txt`.__
 
 * Grouping of laws: The laws are separated into two groups: Derivation Laws and Simplification Laws. Derivation Laws are used to determine the derivatives and generally have the form of "deriv(x, ...) = ".
 
-* Flexible reasoner: The laws used by the program are all configurable - Add or remove laws for a different strategy by updating the files `DerivationLaws.txt` and  `SimplificationLaws.txt`. The intermediate steps for simplification can be turned on by updating `SimplificationLaws.txt` as well.
+* Flexible reasoner: The laws used by the program are all configurable - Add or remove laws for a different strategy by updating the files `DerivationLaws.txt` and  `SimplificationLaws.txt`. 
 
 * Simplifying the result: As an attempt to simplify the results, we added one associativity law (to avoid non-termination) and a few reduction laws to make derivatives of polynomials or  terms like $x^a$ in general more compact.
 
