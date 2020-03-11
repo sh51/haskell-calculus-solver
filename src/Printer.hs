@@ -6,10 +6,10 @@ import Data.Text.Prettyprint.Doc
 import DataTypes
 
 -- Wrapper function to prettify a Calculation.
-prettyCalculation :: Calculation -> Doc ann
+prettyCalculation :: Calculation Expression -> Doc ann
 prettyCalculation c = pretty c
 
-instance Pretty Calculation where
+instance Pretty a =>  Pretty (Calculation a) where
   pretty (Calculation d steps) =  pretty d <> line <> vsep (map pretty steps) <> line
 
 instance Pretty Expression where
@@ -24,5 +24,5 @@ instance Pretty Expression where
   pretty (Func f e) = pretty f <> lparen <> pretty e <> rparen
   pretty (Deriv d e) = pretty ("d/d" ++ (getName d)) <> space <> pretty e
 
-instance Pretty Step where
+instance Pretty a => Pretty (Step a) where
   pretty (Step s e) = pretty "=" <> indent 1 (pretty "{" <> pretty s <> pretty "}") <> line <> pretty e

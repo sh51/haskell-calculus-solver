@@ -12,6 +12,24 @@ import Printer ()
 import Solver
 import Utils
 
+teststr :: String
+teststr = "0+((0+1)+0)"
+
+-- extract string
+
+testSolver :: IO ()
+testSolver = do
+  simplificationLaws' <- lawsFromFile "SimplificationLaws.txt"
+  let simplificationLaws = generateLaws simplificationLaws'
+
+  (case (parse pExpression "" teststr) of
+      -- Print the solution to screen and save as markdown to file.
+      -- (Right e) -> let pprint = pretty (reasonTop simplificationLaws (Calculation e []))
+      (Right e) -> let pprint = pretty (calculate' simplificationLaws e)
+                   in putDoc pprint
+      -- Print the errors.
+      (Left e) -> putStrLn (show e))
+
 main :: IO ()
 main = do
   -- Check for verbose flag.
@@ -64,3 +82,4 @@ main = do
                                                                  hPutStrLn h "```")
       -- Print the errors.
       (Left e) -> putStrLn (show e))
+

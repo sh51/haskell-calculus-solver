@@ -73,16 +73,20 @@ compatibleAll subs1 subs2 = and [compatible sub1 sub2| sub1 <- subs1, sub2 <- su
 patMTop :: Law -> Expression -> [Expression]
 patMTop (Law _ le1 le2) e3 = if null res then [] else [foldr apply le2 res]
   where res = filter (not.isDigit.head.fst) (match le1 e3)
+{-
+rwsTop :: [Law] -> Expression -> [Step Expression]
+rwsTop ls e = (concat.map(\l ->map (\e' -> (Step (lname l) e')) (patMTop l e))) ls
+-}
 
 -- rewrite wrapper, wrapping rewrites in steps
-rws :: [Law] -> Expression -> [Step]
+-- takes a list of law and expression, return a list of alternative steps
+rws :: [Law] -> Expression -> [Step Expression]
 rws ls e = (concat.map (\l ->map (\e' -> (Step (lname l) e')) (rwsOne l e))) ls
 
 -- recursively perform rewrites on expressions
 rwsOne :: Law -> Expression -> [Expression]
 rwsOne l e
-  = patMTop l e ++
-    case e of
+  = case e of
       (Var _) -> []
       (Const _) -> []
       (Negation e') -> [Negation e'' | e'' <- rwsOne l e']
@@ -93,6 +97,7 @@ rwsOne l e
       (Expt e1 e2) -> [Expt e1' e2 | e1' <- rwsOne l e1] ++ [Expt e1 e2' | e2' <- rwsOne l e2]
       (Func e1 e2) -> [Func e1' e2 | e1' <- rwsOne l e1] ++ [Func e1 e2' | e2' <- rwsOne l e2]
       (Deriv e1 e2) -> [Deriv e1' e2 | e1' <- rwsOne l e1] ++ [Deriv e1 e2' | e2' <- rwsOne l e2]
+    ++ patMTop l e
 
 -- helper function to create a list of laws from a list of strings
 generateLaws :: [String] -> [Law]
