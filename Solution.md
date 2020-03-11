@@ -2,7 +2,7 @@
 The data-types can be found in DataTypes.hs.
 
 # 2
-First off all Step and Calculation are both functors, fmapping a function to a Step applies that function to the wrapped expression fmapping a function to a Calculation basically applys it to all expressions in th calculation.
+First of all Step and Calculation are both functors, fmapping a function to a Step applies that function to the wrapped expression fmapping a function to a Calculation basically applys it to all expressions in th calculation.
 
 pure indicates the default context for Calculation is an empty list (of Step).
 
